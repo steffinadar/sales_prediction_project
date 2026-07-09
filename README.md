@@ -1,2 +1,25 @@
-# sales_prediction_project
-Sales Prediction Using Python is a machine learning project developed to predict product sales based on advertising expenditures such as TV, Radio, and Newspaper marketing. The project uses data preprocessing, Linear Regression, model training, and evaluation techniques to generate accurate sales predictions for better business decision-making.
+Sales Prediction Using Python
+
+Objective:
+Predict product sales based on TV, Radio, and Newspaper advertising budgets.
+
+Algorithm:
+Linear Regression
+
+Tools Used:
+Python
+Pandas
+NumPy
+Scikit-learn
+Matplotlib
+Joblib
+
+Features:
+- Data preprocessing
+- Model training
+- Sales prediction
+- Performance evaluation
+- Model saving
+
+Outcome:
+Predicts future product sales accurately using machine learning.
