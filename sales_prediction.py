@@ -1,69 +1,76 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import joblib
+
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error,r2_score
-import joblib
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+print("="*60)
+print("        SALES PREDICTION USING PYTHON")
+print("="*60)
 
 # Load dataset
 data = pd.read_csv("sales.csv")
 
-print("First 5 rows")
+print("\nDataset Loaded Successfully")
+print("Dataset Shape:", data.shape)
+
+print("\nFirst 5 Rows")
 print(data.head())
 
-print("\nDataset Information")
-print(data.info())
-
-print("\nChecking null values")
+print("\nMissing Values")
 print(data.isnull().sum())
 
-# Features and target
-X = data[['TV','Radio','Newspaper']]
+# Features and Target
+X = data[['TV', 'Radio', 'Newspaper']]
 y = data['Sales']
 
-# Split dataset
-X_train,X_test,y_train,y_test = train_test_split(
-    X,
-    y,
+# Split Data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
     test_size=0.2,
     random_state=42
 )
 
-# Model training
-model = LinearRegression()
+print("\nTraining Model...")
 
-model.fit(X_train,y_train)
+# Linear Regression Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+print("Model Trained Successfully")
 
 # Prediction
-prediction=model.predict(X_test)
+y_pred = model.predict(X_test)
 
-# Accuracy
-print("\nR2 Score:")
-print(r2_score(y_test,prediction))
+print("\nModel Performance")
+print("R2 Score :", round(r2_score(y_test, y_pred), 3))
+print("MAE :", round(mean_absolute_error(y_test, y_pred), 3))
+print("MSE :", round(mean_squared_error(y_test, y_pred), 3))
 
-print("\nMean Absolute Error:")
-print(mean_absolute_error(y_test,prediction))
+# Save Model
+joblib.dump(model, "sales_model.pkl")
+print("\nModel Saved Successfully as sales_model.pkl")
 
-# Save model
-joblib.dump(model,"model.pkl")
+# User Prediction
+print("\nPredict New Sales")
 
-print("\nModel saved successfully")
+tv = float(input("Enter TV Advertisement Budget: "))
+radio = float(input("Enter Radio Advertisement Budget: "))
+newspaper = float(input("Enter Newspaper Advertisement Budget: "))
 
-# Predict custom input
-tv=float(input("TV Advertising Budget: "))
-radio=float(input("Radio Advertising Budget: "))
-news=float(input("Newspaper Advertising Budget: "))
+prediction = model.predict([[tv, radio, newspaper]])
 
-new_prediction=model.predict([[tv,radio,news]])
-
-print("Predicted Sales:",new_prediction[0])
+print("\nPredicted Sales =", round(prediction[0], 2))
 
 # Graph
-plt.scatter(y_test,prediction)
-
+plt.figure(figsize=(6,5))
+plt.scatter(y_test, y_pred)
 plt.xlabel("Actual Sales")
 plt.ylabel("Predicted Sales")
-
 plt.title("Actual vs Predicted Sales")
-
+plt.grid(True)
 plt.show()
+
+print("\nProject Completed Successfully")
